@@ -1,0 +1,59 @@
+services:
+  app:
+    build: .
+    ports:
+      - "8020:80"
+      - "8443:443"
+      - "3000:3000"
+    volumes:
+      - ./public:/app/public:Z
+      - ./server:/app/server:Z
+      - ./app:/app/frontend:Z
+      - node_modules:/tmp/build/node_modules
+      - caddy_data:/data
+      - caddy_config:/config
+    environment:
+      - SERVER_NAME=${SERVER_NAME:-localhost}
+      - DB_DRIVER=mysql
+      - DB_HOST=mysql
+      - DB_NAME=app
+      - DB_USER=app
+      - DB_PASSWORD=app
+    # Use with nerdctl compose (Docker-compatible Compose syntax).
+    command: >-
+      sh -c 'bun /app/setup.ts -i /app/frontend -o /app/dist -t &&
+      (watchexec -w /app -- bun /app/setup.ts -i /app/frontend
+      -o /app/dist -t > /app/watchexec.log 2>&1 &) &&
+      exec frankenphp run --config /etc/caddy/Caddyfile'
+    restart: unless-stopped
+
+  mysql:
+    image: mysql:8
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: app
+      MYSQL_USER: app
+      MYSQL_PASSWORD: app
+    volumes:
+      - mysql_data:/var/lib/mysql
+    restart: unless-stopped
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+    ports:
+      - "8080:80"
+    depends_on:
+      - mysql
+    restart: unless-stopped
+
+  
+    
+volumes:
+  vendor:
+  caddy_data:
+  caddy_config:
+  node_modules:
+  mysql_data:

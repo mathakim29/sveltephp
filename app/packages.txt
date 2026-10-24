@@ -1,0 +1,3 @@
+# External frontend packages used by this directory and its components.
+dayjs@1.11.13
+blockly@12.3.1

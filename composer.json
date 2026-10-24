@@ -1,0 +1,6 @@
+{
+  "require": {
+    "flightphp/core": "^3.19",
+    "gabordemooij/redbean": "^5.7"
+  }
+}
