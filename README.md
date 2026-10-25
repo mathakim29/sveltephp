@@ -4,20 +4,54 @@
 [![Svelte](https://img.shields.io/badge/Svelte-5-FF3E00?logo=svelte&logoColor=white)](https://svelte.dev/)
 
 A PHP application served by FrankenPHP with a Svelte frontend compiled by Bun.
+The development stack is managed with the `pyorca` container helper, and
 JavaScript dependencies stay inside the container.
 
 > **Experimental:** This project is experimental and may change without notice.
 
+## Requirements
+
+- Python 3.10+
+- `uv` or another Python package runner
+- Docker, Podman, or nerdctl
+
 ## Run
 
-This project is tested using `nerdctl` but other container runtimes should work similarly 
+The recommended workflow uses `init.py`, which provisions MySQL, builds the
+FrankenPHP image, and starts the application container:
+
+```sh
+uv run init.py up
+```
+
+Other lifecycle commands are available:
+
+```sh
+uv run init.py status
+uv run init.py logs
+uv run init.py down
+uv run init.py restart
+```
+
+The project is tested using `nerdctl`, but Docker and Podman should work
+similarly.
+
+For the legacy Compose workflow, use:
 
 ```sh
 nerdctl compose up --build
 ```
 
-The application is available at `http://localhost:8020`. 
-phpMyAdmin is available at `http://localhost:8080`.
+The application is available at `http://localhost:8020`; phpMyAdmin is
+available at `http://localhost:8080` when enabled through the Compose setup.
+
+## Project layout
+
+- `init.py` — pyorca deployment entry point
+- `app/` — Svelte components and frontend package manifests
+- `server/` — PHP application entry point
+- `setup.ts` — Bun/Svelte build script
+- `Dockerfile` and `Caddyfile` — FrankenPHP runtime configuration
 
 ## Frontend dependencies
 
