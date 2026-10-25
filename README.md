@@ -6,6 +6,7 @@
 A PHP application served by FrankenPHP with a Svelte frontend compiled by Bun.
 JavaScript dependencies stay inside the container.
 
+> **Experimental:** This project is experimental and may change without notice.
 
 ## Run
 
