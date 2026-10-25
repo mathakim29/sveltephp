@@ -10,9 +10,7 @@ JavaScript dependencies stay inside the container.
 > **Experimental:** This project is experimental and may change without notice.
 
 ## Requirements
-
-- Python 3.10+
-- `uv` or another Python package runner
+- `uv` 
 - Docker, Podman, or nerdctl
 
 ## Run
