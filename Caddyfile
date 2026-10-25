@@ -1,0 +1,29 @@
+{
+	auto_https disable_redirects
+}
+
+http://{$SERVER_NAME} https://{$SERVER_NAME} {
+	tls internal
+	root * /app
+
+	@static path /dist/* /public/*
+	handle @static {
+		file_server
+	}
+
+	@root path /
+	handle @root {
+		rewrite * /server/index.php
+		php_server
+	}
+
+	@frontendAssets {
+		not path / /server* /public* /dist*
+	}
+	handle @frontendAssets {
+		rewrite * /dist{uri}
+		file_server
+	}
+
+	respond 404
+}
